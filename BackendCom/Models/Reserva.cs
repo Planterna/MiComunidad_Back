@@ -19,7 +19,7 @@ public partial class Reserva
 
     public string? Motivo { get; set; }
 
-    public string? Estado { get; set; }
+    public string? Estado { get; set; } = "Pendiente";
 
     public bool? Activo { get; set; }
 
