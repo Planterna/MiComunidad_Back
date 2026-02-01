@@ -1,13 +1,14 @@
 ﻿using BackendCom.Contexts;
 using BackendCom.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ApiMovies.Controllers
+namespace BackendComunidad.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -82,14 +83,28 @@ namespace ApiMovies.Controllers
         }
 
 
-        
+
         [HttpPost("crear")]
-        public async Task<IActionResult> PostUsuarioCrear(Usuario usuario)
+        public async Task<IActionResult> PostUsuarioCrear([FromBody] Usuario usuario)
         {
-            if (await _context.Usuarios.AnyAsync(u => u.Email == usuario.Email))
+            // Validaciones
+            if (string.IsNullOrWhiteSpace(usuario.Cedula)) return BadRequest("La cédula es obligatoria");
+            if (string.IsNullOrWhiteSpace(usuario.Nombres)) return BadRequest("El nombre es obligatorio");
+            if (string.IsNullOrWhiteSpace(usuario.Apellidos)) return BadRequest("El apellido es obligatorio");
+            if (string.IsNullOrWhiteSpace(usuario.Email)) return BadRequest("El correo es obligatorio");
+            if (string.IsNullOrWhiteSpace(usuario.PassHash)) return BadRequest("La contraseña es obligatoria");
+
+            if (await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == usuario.Email.ToLower()))
                 return BadRequest("El correo ya está registrado");
 
-            usuario.RolId = 2; // Usuario normal
+            if (await _context.Usuarios.AnyAsync(u => u.Cedula == usuario.Cedula))
+                return BadRequest("La cédula ya está registrada");
+
+            // Hash
+            usuario.PassHash = BCrypt.Net.BCrypt.HashPassword(usuario.PassHash);
+
+            // Resto de campos
+            usuario.RolId = 3;
             usuario.Estado = "Activo";
             usuario.FechaCreacion = DateTime.Now;
             usuario.FechaModificacion = null;
@@ -99,5 +114,7 @@ namespace ApiMovies.Controllers
 
             return Ok(new { message = "Usuario creado correctamente" });
         }
+
+
     }
 }
