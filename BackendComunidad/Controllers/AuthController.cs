@@ -31,20 +31,28 @@ namespace BackendComunidad.Controllers
 
             var usuario = _context.Usuarios
                 .Include(u => u.Rol)
-                .AsNoTracking()
                 .FirstOrDefault(u =>
                     u.Email == login.Email &&
-                    u.PassHash == login.PassHash &&   
                     u.Estado == "Activo"
                 );
 
             if (usuario == null)
                 return Unauthorized("Credenciales incorrectas");
 
+            // Verificar contraseña con BCrypt
+            bool passwordValida = BCrypt.Net.BCrypt.Verify(
+                login.PassHash,      // contraseña que escribe el usuario
+                usuario.PassHash     // hash guardado en la BD
+            );
+
+            if (!passwordValida)
+                return Unauthorized("Credenciales incorrectas");
+
             var token = GenerateToken(usuario);
 
             return Ok(new { token });
         }
+
 
         private string GenerateToken(Usuario usuario)
         {
