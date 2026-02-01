@@ -7,18 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
-<<<<<<< HEAD
-=======
 using Microsoft.AspNetCore.Authorization;
->>>>>>> Agregar archivos de proyecto.
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
-<<<<<<< HEAD
-=======
     [Authorize]
->>>>>>> Agregar archivos de proyecto.
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -31,10 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Roles
         [HttpGet]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
             return await _context.Roles.ToListAsync();
@@ -42,10 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Roles/5
         [HttpGet("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Role>> GetRole(int id)
         {
             var role = await _context.Roles.FindAsync(id);
@@ -61,10 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/Roles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> PutRole(int id, Role role)
         {
             if (id != role.Id)
@@ -96,10 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/Roles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
             _context.Roles.Add(role);
@@ -110,10 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Roles/5
         [HttpDelete("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> DeleteRole(int id)
         {
             var role = await _context.Roles.FindAsync(id);

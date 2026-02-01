@@ -7,18 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
-<<<<<<< HEAD
-=======
 using Microsoft.AspNetCore.Authorization;
->>>>>>> Agregar archivos de proyecto.
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
-<<<<<<< HEAD
-=======
     [Authorize]
->>>>>>> Agregar archivos de proyecto.
     [ApiController]
     public class TipoRecursoesController : ControllerBase
     {
@@ -31,10 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/TipoRecursoes
         [HttpGet]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<TipoRecurso>>> GetTipoRecursos()
         {
             return await _context.TipoRecursos.ToListAsync();
@@ -42,10 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/TipoRecursoes/5
         [HttpGet("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<TipoRecurso>> GetTipoRecurso(int id)
         {
             var tipoRecurso = await _context.TipoRecursos.FindAsync(id);
@@ -61,10 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/TipoRecursoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> PutTipoRecurso(int id, TipoRecurso tipoRecurso)
         {
             if (id != tipoRecurso.Id)
@@ -96,10 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/TipoRecursoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<TipoRecurso>> PostTipoRecurso(TipoRecurso tipoRecurso)
         {
             _context.TipoRecursos.Add(tipoRecurso);
@@ -110,10 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/TipoRecursoes/5
         [HttpDelete("{id}")]
-<<<<<<< HEAD
-=======
         [AllowAnonymous]
->>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> DeleteTipoRecurso(int id)
         {
             var tipoRecurso = await _context.TipoRecursos.FindAsync(id);

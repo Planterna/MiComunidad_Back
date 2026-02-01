@@ -15,11 +15,8 @@ public partial class Usuario
 
     public string Email { get; set; } = null!;
 
-<<<<<<< HEAD
-=======
     public string PassHash { get; set; } = null!;
 
->>>>>>> Agregar archivos de proyecto.
     public string? Telefono { get; set; }
 
     public string? Direccion { get; set; }
@@ -41,9 +38,5 @@ public partial class Usuario
     public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
     public virtual Role Rol { get; set; } = null!;
-<<<<<<< HEAD
-=======
 
-    
->>>>>>> Agregar archivos de proyecto.
 }
