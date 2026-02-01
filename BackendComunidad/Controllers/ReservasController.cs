@@ -7,10 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+<<<<<<< HEAD
+=======
+using Microsoft.AspNetCore.Authorization;
+>>>>>>> Agregar archivos de proyecto.
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+<<<<<<< HEAD
+=======
+    [Authorize]
+>>>>>>> Agregar archivos de proyecto.
     [ApiController]
     public class ReservasController : ControllerBase
     {
@@ -23,6 +31,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Reservas
         [HttpGet]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<Reserva>>> GetReservas()
         {
             return await _context.Reservas.ToListAsync();
@@ -30,6 +42,10 @@ namespace BackendComunidad.Controllers
 
         //GET: api/Reservas/Full
         [HttpGet("Full")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<ReservasDTO>>> GetReservasFull()
         {
             return await _context.ReservasDTO
@@ -38,6 +54,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Reservas/5
         [HttpGet("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Reserva>> GetReserva(int id)
         {
             var reserva = await _context.Reservas.FindAsync(id);
@@ -53,6 +73,10 @@ namespace BackendComunidad.Controllers
         // PUT: api/Reservas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> PutReserva(int id, Reserva reserva)
         {
             if (id != reserva.Id)
@@ -84,6 +108,10 @@ namespace BackendComunidad.Controllers
         // POST: api/Reservas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Reserva>> PostReserva(Reserva reserva)
         {
             _context.Reservas.Add(reserva);
@@ -94,6 +122,10 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Reservas/5
         [HttpDelete("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> DeleteReserva(int id)
         {
             var reserva = await _context.Reservas.FindAsync(id);

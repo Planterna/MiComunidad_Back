@@ -84,6 +84,13 @@ namespace BackendComunidad.Controllers
             return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
         }
 
+<<<<<<< HEAD
+=======
+        
+
+
+
+>>>>>>> Agregar archivos de proyecto.
         // DELETE: api/Usuarios/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)

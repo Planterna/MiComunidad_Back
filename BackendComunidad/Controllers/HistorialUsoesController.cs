@@ -7,10 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+<<<<<<< HEAD
+=======
+using Microsoft.AspNetCore.Authorization;
+>>>>>>> Agregar archivos de proyecto.
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+<<<<<<< HEAD
+=======
+    [Authorize]
+>>>>>>> Agregar archivos de proyecto.
     [ApiController]
     public class HistorialUsoesController : ControllerBase
     {
@@ -23,6 +31,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/HistorialUsoes
         [HttpGet]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<HistorialUso>>> GetHistorialUsos()
         {
             return await _context.HistorialUsos.ToListAsync();
@@ -30,6 +42,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/HistorialUsoes/5
         [HttpGet("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<HistorialUso>> GetHistorialUso(int id)
         {
             var historialUso = await _context.HistorialUsos.FindAsync(id);
@@ -45,6 +61,10 @@ namespace BackendComunidad.Controllers
         // PUT: api/HistorialUsoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> PutHistorialUso(int id, HistorialUso historialUso)
         {
             if (id != historialUso.Id)
@@ -76,6 +96,10 @@ namespace BackendComunidad.Controllers
         // POST: api/HistorialUsoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<HistorialUso>> PostHistorialUso(HistorialUso historialUso)
         {
             _context.HistorialUsos.Add(historialUso);
@@ -86,6 +110,10 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/HistorialUsoes/5
         [HttpDelete("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> DeleteHistorialUso(int id)
         {
             var historialUso = await _context.HistorialUsos.FindAsync(id);

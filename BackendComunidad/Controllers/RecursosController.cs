@@ -7,10 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+<<<<<<< HEAD
+=======
+using Microsoft.AspNetCore.Authorization;
+>>>>>>> Agregar archivos de proyecto.
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+<<<<<<< HEAD
+=======
+    [Authorize]
+>>>>>>> Agregar archivos de proyecto.
     [ApiController]
     public class RecursosController : ControllerBase
     {
@@ -23,6 +31,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes
         [HttpGet]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<IEnumerable<Recurso>>> GetRecursos()
         {
             return await _context.Recursos.ToListAsync();
@@ -30,6 +42,10 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes/5
         [HttpGet("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Recurso>> GetRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);
@@ -45,6 +61,10 @@ namespace BackendComunidad.Controllers
         // PUT: api/Recursoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> PutRecurso(int id, Recurso recurso)
         {
             if (id != recurso.Id)
@@ -76,6 +96,10 @@ namespace BackendComunidad.Controllers
         // POST: api/Recursoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<ActionResult<Recurso>> PostRecurso(Recurso recurso)
         {
             _context.Recursos.Add(recurso);
@@ -86,6 +110,10 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Recursoes/5
         [HttpDelete("{id}")]
+<<<<<<< HEAD
+=======
+        [AllowAnonymous]
+>>>>>>> Agregar archivos de proyecto.
         public async Task<IActionResult> DeleteRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);
