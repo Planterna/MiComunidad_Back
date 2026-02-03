@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\steve\\Desktop\\DAWA\\PROYECTOCOMUNIDAD\\MiComunidad_Back-master\\MiComunidad_Back-master\\BackendCom\\BackendCom.csproj": {}
+    "C:\\Users\\laptop\\Desktop\\Practicas\\.net\\MiComunidad_Back\\BackendCom\\BackendCom.csproj": {}
   },
   "projects": {
-    "C:\\Users\\steve\\Desktop\\DAWA\\PROYECTOCOMUNIDAD\\MiComunidad_Back-master\\MiComunidad_Back-master\\BackendCom\\BackendCom.csproj": {
+    "C:\\Users\\laptop\\Desktop\\Practicas\\.net\\MiComunidad_Back\\BackendCom\\BackendCom.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\Desktop\\DAWA\\PROYECTOCOMUNIDAD\\MiComunidad_Back-master\\MiComunidad_Back-master\\BackendCom\\BackendCom.csproj",
+        "projectUniqueName": "C:\\Users\\laptop\\Desktop\\Practicas\\.net\\MiComunidad_Back\\BackendCom\\BackendCom.csproj",
         "projectName": "BackendCom",
-        "projectPath": "C:\\Users\\steve\\Desktop\\DAWA\\PROYECTOCOMUNIDAD\\MiComunidad_Back-master\\MiComunidad_Back-master\\BackendCom\\BackendCom.csproj",
-        "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\Desktop\\DAWA\\PROYECTOCOMUNIDAD\\MiComunidad_Back-master\\MiComunidad_Back-master\\BackendCom\\obj\\",
+        "projectPath": "C:\\Users\\laptop\\Desktop\\Practicas\\.net\\MiComunidad_Back\\BackendCom\\BackendCom.csproj",
+        "packagesPath": "C:\\Users\\laptop\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\laptop\\Desktop\\Practicas\\.net\\MiComunidad_Back\\BackendCom\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\steve\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\laptop\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
