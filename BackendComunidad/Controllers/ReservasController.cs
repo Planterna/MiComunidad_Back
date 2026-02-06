@@ -50,7 +50,7 @@ namespace BackendComunidad.Controllers
 
             if (reserva == null)
             {
-                return NotFound();
+                return NotFound("No se encontraron los datos solicitados");
             }
 
             return reserva;
@@ -64,7 +64,7 @@ namespace BackendComunidad.Controllers
         {
             if (id != reserva.Id)
             {
-                return BadRequest();
+                return BadRequest("La reserva solicitada no exite");
             }
 
             _context.Entry(reserva).State = EntityState.Modified;
@@ -77,7 +77,7 @@ namespace BackendComunidad.Controllers
             {
                 if (!ReservaExists(id))
                 {
-                    return NotFound();
+                    return NotFound("No Encontrado");
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace BackendComunidad.Controllers
             var reserva = await _context.Reservas.FindAsync(id);
             if (reserva == null)
             {
-                return NotFound();
+                return NotFound("Reserva no encontrada");
             }
 
             _context.Reservas.Remove(reserva);

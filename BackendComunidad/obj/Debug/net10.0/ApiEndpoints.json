@@ -32,9 +32,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "BackendComunidad.Controllers.HistorialUsoesController",
+    "ContainingType": "BackendComunidad.Controllers.HistorialUsosController",
     "Method": "GetHistorialUsos",
-    "RelativePath": "api/HistorialUsoes",
+    "RelativePath": "api/HistorialUsos",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -52,16 +52,16 @@
     ]
   },
   {
-    "ContainingType": "BackendComunidad.Controllers.HistorialUsoesController",
+    "ContainingType": "BackendComunidad.Controllers.HistorialUsosController",
     "Method": "PostHistorialUso",
-    "RelativePath": "api/HistorialUsoes",
+    "RelativePath": "api/HistorialUsos",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "historialUso",
-        "Type": "BackendCom.Models.HistorialUso",
+        "Name": "dto",
+        "Type": "BackendCom.Models.HistorialUsoDto",
         "IsRequired": true
       }
     ],
@@ -78,9 +78,9 @@
     ]
   },
   {
-    "ContainingType": "BackendComunidad.Controllers.HistorialUsoesController",
+    "ContainingType": "BackendComunidad.Controllers.HistorialUsosController",
     "Method": "GetHistorialUso",
-    "RelativePath": "api/HistorialUsoes/{id}",
+    "RelativePath": "api/HistorialUsos/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -104,9 +104,9 @@
     ]
   },
   {
-    "ContainingType": "BackendComunidad.Controllers.HistorialUsoesController",
+    "ContainingType": "BackendComunidad.Controllers.HistorialUsosController",
     "Method": "PutHistorialUso",
-    "RelativePath": "api/HistorialUsoes/{id}",
+    "RelativePath": "api/HistorialUsos/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -117,17 +117,17 @@
         "IsRequired": true
       },
       {
-        "Name": "historialUso",
-        "Type": "BackendCom.Models.HistorialUso",
+        "Name": "dto",
+        "Type": "BackendCom.Models.HistorialUsoDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "BackendComunidad.Controllers.HistorialUsoesController",
+    "ContainingType": "BackendComunidad.Controllers.HistorialUsosController",
     "Method": "DeleteHistorialUso",
-    "RelativePath": "api/HistorialUsoes/{id}",
+    "RelativePath": "api/HistorialUsos/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

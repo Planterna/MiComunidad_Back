@@ -67,10 +67,10 @@
         }
       }
     },
-    "/api/HistorialUsoes": {
+    "/api/HistorialUsos": {
       "get": {
         "tags": [
-          "HistorialUsoes"
+          "HistorialUsos"
         ],
         "responses": {
           "200": {
@@ -106,23 +106,23 @@
       },
       "post": {
         "tags": [
-          "HistorialUsoes"
+          "HistorialUsos"
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             }
           }
@@ -151,10 +151,10 @@
         }
       }
     },
-    "/api/HistorialUsoes/{id}": {
+    "/api/HistorialUsos/{id}": {
       "get": {
         "tags": [
-          "HistorialUsoes"
+          "HistorialUsos"
         ],
         "parameters": [
           {
@@ -192,7 +192,7 @@
       },
       "put": {
         "tags": [
-          "HistorialUsoes"
+          "HistorialUsos"
         ],
         "parameters": [
           {
@@ -209,17 +209,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/HistorialUso"
+                "$ref": "#/components/schemas/HistorialUsoDto"
               }
             }
           }
@@ -232,7 +232,7 @@
       },
       "delete": {
         "tags": [
-          "HistorialUsoes"
+          "HistorialUsos"
         ],
         "parameters": [
           {
@@ -1461,6 +1461,47 @@
         },
         "additionalProperties": false
       },
+      "HistorialUsoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usuarioId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recursoId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaUso": {
+            "type": "string",
+            "nullable": true
+          },
+          "horaInicio": {
+            "type": "string",
+            "nullable": true
+          },
+          "horaFin": {
+            "type": "string",
+            "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "nullable": true
+          },
+          "notas": {
+            "type": "string",
+            "nullable": true
+          },
+          "activo": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginModel": {
         "required": [
           "email",
@@ -1883,7 +1924,7 @@
       "name": "Auth"
     },
     {
-      "name": "HistorialUsoes"
+      "name": "HistorialUsos"
     },
     {
       "name": "Noticias"
