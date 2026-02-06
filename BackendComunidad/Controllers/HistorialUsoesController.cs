@@ -14,11 +14,11 @@ namespace BackendComunidad.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class HistorialUsoesController : ControllerBase
+    public class HistorialUsosController : ControllerBase
     {
         private readonly ComunidadContext _context;
 
-        public HistorialUsoesController(ComunidadContext context)
+        public HistorialUsosController(ComunidadContext context)
         {
             _context = context;
         }
@@ -28,7 +28,8 @@ namespace BackendComunidad.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<HistorialUso>>> GetHistorialUsos()
         {
-            return await _context.HistorialUsos.ToListAsync();
+            return await _context.HistorialUsos.Include(h=> h.Usuario)
+                .Include(h => h.Recurso).ToListAsync();
         }
 
         // GET: api/HistorialUsoes/5
@@ -49,46 +50,57 @@ namespace BackendComunidad.Controllers
         // PUT: api/HistorialUsoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> PutHistorialUso(int id, HistorialUso historialUso)
+        public async Task<IActionResult> PutHistorialUso(int id, HistorialUsoDto dto)
         {
-            if (id != historialUso.Id)
-            {
-                return BadRequest();
-            }
+            if (id != dto.Id)
+                return BadRequest("El id no coincide");
 
-            _context.Entry(historialUso).State = EntityState.Modified;
+            var entity = await _context.HistorialUsos.FindAsync(id);
+            if (entity == null)
+                return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HistorialUsoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            entity.UsuarioId = dto.UsuarioId;
+            entity.RecursoId = dto.RecursoId;
+            entity.FechaUso = DateOnly.Parse(dto.FechaUso);
+            entity.HoraInicio = TimeOnly.Parse(dto.HoraInicio);
+            entity.HoraFin = TimeOnly.Parse(dto.HoraFin);
+            entity.Estado = dto.Estado;
+            entity.Notas = dto.Notas;
+            entity.Activo = dto.Activo;
+            entity.FechaModificacion = DateTime.Now;
 
+            await _context.SaveChangesAsync();
             return NoContent();
         }
+
 
         // POST: api/HistorialUsoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult<HistorialUso>> PostHistorialUso(HistorialUso historialUso)
+        public async Task<ActionResult<HistorialUso>> PostHistorialUso(HistorialUsoDto dto)
         {
-            _context.HistorialUsos.Add(historialUso);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var entity = new HistorialUso
+            {
+                UsuarioId = dto.UsuarioId,
+                RecursoId = dto.RecursoId,
+                FechaUso = DateOnly.ParseExact(dto.FechaUso, "yyyy-MM-dd"),
+                HoraInicio = TimeOnly.ParseExact(dto.HoraInicio, "HH:mm"),
+                HoraFin = TimeOnly.ParseExact(dto.HoraFin, "HH:mm"),
+                Estado = dto.Estado,
+                Notas = dto.Notas,
+                Activo = dto.Activo,
+                FechaCreacion = DateTime.Now
+            };
+
+            _context.HistorialUsos.Add(entity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetHistorialUso", new { id = historialUso.Id }, historialUso);
+            return CreatedAtAction(nameof(GetHistorialUso), new { id = entity.Id }, entity);
         }
+
 
         // DELETE: api/HistorialUsoes/5
         [HttpDelete("{id}")]
