@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class HistorialUsosController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/HistorialUsoes
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<HistorialUso>>> GetHistorialUsos()
         {
             return await _context.HistorialUsos.Include(h=> h.Usuario)
@@ -31,6 +34,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/HistorialUsoes/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<HistorialUso>> GetHistorialUso(int id)
         {
             var historialUso = await _context.HistorialUsos.FindAsync(id);
@@ -100,6 +104,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/HistorialUsoes/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteHistorialUso(int id)
         {
             var historialUso = await _context.HistorialUsos.FindAsync(id);

@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class NoticiasController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Noticias
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Noticia>>> GetNoticias()
         {
             return await _context.Noticias.ToListAsync();
@@ -30,6 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Noticias/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Noticia>> GetNoticia(int id)
         {
             var noticia = await _context.Noticias.FindAsync(id);
@@ -45,6 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/Noticias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> PutNoticia(int id, Noticia noticia)
         {
             if (id != noticia.Id)
@@ -76,6 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/Noticias
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Noticia>> PostNoticia(Noticia noticia)
         {
             _context.Noticias.Add(noticia);
@@ -86,6 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Noticias/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteNoticia(int id)
         {
             var noticia = await _context.Noticias.FindAsync(id);

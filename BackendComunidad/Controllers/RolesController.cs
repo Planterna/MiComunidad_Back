@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Roles
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
             return await _context.Roles.ToListAsync();
@@ -30,6 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Roles/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Role>> GetRole(int id)
         {
             var role = await _context.Roles.FindAsync(id);
@@ -45,6 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/Roles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> PutRole(int id, Role role)
         {
             if (id != role.Id)
@@ -76,6 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/Roles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Role>> PostRole(Role role)
         {
             _context.Roles.Add(role);
@@ -86,6 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Roles/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteRole(int id)
         {
             var role = await _context.Roles.FindAsync(id);

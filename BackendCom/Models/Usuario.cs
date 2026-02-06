@@ -5,7 +5,7 @@ namespace BackendCom.Models;
 
 public partial class Usuario
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     public string Cedula { get; set; } = null!;
 
@@ -15,11 +15,13 @@ public partial class Usuario
 
     public string Email { get; set; } = null!;
 
+    public string PassHash { get; set; } = null!;
+
     public string? Telefono { get; set; }
 
     public string? Direccion { get; set; }
 
-    public int RolId { get; set; }
+    public int? RolId { get; set; }
 
     public string? Estado { get; set; }
 
@@ -35,5 +37,7 @@ public partial class Usuario
 
     public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
-    public virtual Role Rol { get; set; } = null!;
+    public virtual Role? Rol { get; set; }
+
+
 }

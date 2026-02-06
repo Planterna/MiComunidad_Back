@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class RecursosController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Recurso>>> GetRecursos()
         {
             return await _context.Recursos.ToListAsync();
@@ -30,6 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Recurso>> GetRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);
@@ -45,6 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/Recursoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> PutRecurso(int id, Recurso recurso)
         {
             if (id != recurso.Id)
@@ -76,6 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/Recursoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Recurso>> PostRecurso(Recurso recurso)
         {
             _context.Recursos.Add(recurso);
@@ -86,6 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Recursoes/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);

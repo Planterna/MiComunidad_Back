@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ReservasController : ControllerBase
     {
@@ -23,6 +25,8 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Reservas
         [HttpGet]
+        [Authorize (Roles = "Administrador, Encargado, Vecino")]
+
         public async Task<ActionResult<IEnumerable<Reserva>>> GetReservas()
         {
             return await _context.Reservas.ToListAsync();
@@ -30,6 +34,7 @@ namespace BackendComunidad.Controllers
 
         //GET: api/Reservas/Full
         [HttpGet("Full")]
+        [Authorize(Roles = "Administrador, Encargado, Vecino")]
         public async Task<ActionResult<IEnumerable<ReservasDTO>>> GetReservasFull()
         {
             return await _context.ReservasDTO
@@ -38,6 +43,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Reservas/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Administrador, Encargado, Vecino")]
         public async Task<ActionResult<Reserva>> GetReserva(int id)
         {
             var reserva = await _context.Reservas.FindAsync(id);
@@ -53,6 +59,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/Reservas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrador, Encargado, Vecino")]
         public async Task<IActionResult> PutReserva(int id, Reserva reserva)
         {
             if (id != reserva.Id)
@@ -84,6 +91,7 @@ namespace BackendComunidad.Controllers
         // POST: api/Reservas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrador, Encargado, Vecino")]
         public async Task<ActionResult<Reserva>> PostReserva(Reserva reserva)
         {
             _context.Reservas.Add(reserva);
@@ -94,6 +102,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Reservas/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador, Encargado, Vecino")]
         public async Task<IActionResult> DeleteReserva(int id)
         {
             var reserva = await _context.Reservas.FindAsync(id);

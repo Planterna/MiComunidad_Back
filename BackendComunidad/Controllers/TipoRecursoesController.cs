@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackendCom.Contexts;
 using BackendCom.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class TipoRecursoesController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/TipoRecursoes
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<TipoRecurso>>> GetTipoRecursos()
         {
             return await _context.TipoRecursos.ToListAsync();
@@ -30,6 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/TipoRecursoes/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TipoRecurso>> GetTipoRecurso(int id)
         {
             var tipoRecurso = await _context.TipoRecursos.FindAsync(id);
@@ -45,6 +49,7 @@ namespace BackendComunidad.Controllers
         // PUT: api/TipoRecursoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> PutTipoRecurso(int id, TipoRecurso tipoRecurso)
         {
             if (id != tipoRecurso.Id)
@@ -76,6 +81,7 @@ namespace BackendComunidad.Controllers
         // POST: api/TipoRecursoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<TipoRecurso>> PostTipoRecurso(TipoRecurso tipoRecurso)
         {
             _context.TipoRecursos.Add(tipoRecurso);
@@ -86,6 +92,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/TipoRecursoes/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteTipoRecurso(int id)
         {
             var tipoRecurso = await _context.TipoRecursos.FindAsync(id);
