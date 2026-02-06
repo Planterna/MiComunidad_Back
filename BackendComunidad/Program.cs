@@ -1,42 +1,43 @@
 using BackendCom.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Controllers
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
 
-
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+// Swagger CLÁSICO (único)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// Configuración de la conexión a la base de datos
-builder.Services.AddDbContext<ComunidadContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// DbContext
+builder.Services.AddDbContext<ComunidadContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp",
-        builder => builder.AllowAnyOrigin() //builder.WithOrigins("http://localhost:4200") // URL de tu proyecto Angular
-            .AllowAnyMethod()// Permite cualquier método HTTP (GET, POST, etc.)
-            .AllowAnyHeader());// Permite cualquier encabezado
+    options.AddPolicy("AllowAngularApp", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+    );
 });
-
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    //agregado
     app.UseSwagger();
     app.UseSwaggerUI();
-
 }
 
 app.UseCors("AllowAngularApp");
