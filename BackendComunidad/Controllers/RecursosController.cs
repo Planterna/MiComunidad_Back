@@ -25,7 +25,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
         public async Task<ActionResult<IEnumerable<Recurso>>> GetRecursos()
         {
             return await _context.Recursos.ToListAsync();
@@ -33,7 +33,7 @@ namespace BackendComunidad.Controllers
 
         // GET: api/Recursoes/5
         [HttpGet("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
         public async Task<ActionResult<Recurso>> GetRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);
@@ -47,9 +47,8 @@ namespace BackendComunidad.Controllers
         }
 
         // PUT: api/Recursoes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrador,Encargado")]
         public async Task<IActionResult> PutRecurso(int id, Recurso recurso)
         {
             if (id != recurso.Id)
@@ -79,9 +78,8 @@ namespace BackendComunidad.Controllers
         }
 
         // POST: api/Recursoes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrador,Encargado")]
         public async Task<ActionResult<Recurso>> PostRecurso(Recurso recurso)
         {
             _context.Recursos.Add(recurso);
@@ -92,7 +90,7 @@ namespace BackendComunidad.Controllers
 
         // DELETE: api/Recursoes/5
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteRecurso(int id)
         {
             var recurso = await _context.Recursos.FindAsync(id);

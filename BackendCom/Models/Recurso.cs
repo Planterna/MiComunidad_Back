@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BackendCom.Models;
 
@@ -25,9 +26,12 @@ public partial class Recurso
 
     public DateTime? FechaModificacion { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<HistorialUso> HistorialUsos { get; set; } = new List<HistorialUso>();
 
+    [JsonIgnore]
     public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
-    public virtual TipoRecurso TipoRecurso { get; set; } = null!;
+    [JsonIgnore]
+    public virtual TipoRecurso? TipoRecurso { get; set; }
 }
