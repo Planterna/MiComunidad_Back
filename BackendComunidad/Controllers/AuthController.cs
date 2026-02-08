@@ -57,20 +57,7 @@ namespace BackendComunidad.Controllers
                 return Unauthorized("Credenciales incorrectas");
 
             // Si el PassHash no es BCrypt válido, NO intentes Verify (evita Invalid salt version)
-            if (string.IsNullOrWhiteSpace(usuario.PassHash) || !usuario.PassHash.StartsWith("$2"))
-                return Unauthorized("Credenciales incorrectas");
-
-            bool passwordValida;
-            try
-            {
-                passwordValida = BCrypt.Net.BCrypt.Verify(pass, usuario.PassHash);
-            }
-            catch
-            {
-                return Unauthorized("Credenciales incorrectas");
-            }
-
-            if (!passwordValida)
+            if (usuario.PassHash != pass)
                 return Unauthorized("Credenciales incorrectas");
 
             var token = GenerateToken(usuario);
