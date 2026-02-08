@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace BackendComunidad.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
+    [Authorize]
     public class HistorialUsosController : ControllerBase
     {
         private readonly ComunidadContext _context;
@@ -23,47 +23,148 @@ namespace BackendComunidad.Controllers
             _context = context;
         }
 
-        // GET: api/HistorialUsoes
+        // GET: api/HistorialUsos
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<HistorialUso>>> GetHistorialUsos()
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
+        public async Task<IActionResult> GetHistorialUsos()
         {
-            return await _context.HistorialUsos.Include(h=> h.Usuario)
-                .Include(h => h.Recurso).ToListAsync();
+            var data = await _context.HistorialUsos
+                .Include(h => h.Usuario)
+                .Include(h => h.Recurso)
+                .Select(h => new
+                {
+                    id = h.Id,
+                    recursoId = h.RecursoId,
+                    usuarioId = h.UsuarioId,
+                    fechaUso = h.FechaUso.ToString("yyyy-MM-dd"),
+                    horaInicio = h.HoraInicio.ToString("HH:mm"),
+                    horaFin = h.HoraFin.ToString("HH:mm"),
+                    estado = h.Estado,
+                    notas = h.Notas,
+                    activo = h.Activo ?? true,
+                    fechaCreacion = h.FechaCreacion,
+                    fechaModificacion = h.FechaModificacion,
+
+                    // IMPORTANTE: usuario y recurso vienen con camelCase gracias a Program.cs
+                    usuario = h.Usuario,
+                    recurso = h.Recurso
+                })
+                .ToListAsync();
+
+            return Ok(data);
         }
 
-        // GET: api/HistorialUsoes/5
+        // GET: api/HistorialUsos/5
         [HttpGet("{id}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<HistorialUso>> GetHistorialUso(int id)
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
+        public async Task<IActionResult> GetHistorialUso(int id)
         {
-            var historialUso = await _context.HistorialUsos.FindAsync(id);
+            var h = await _context.HistorialUsos
+                .Include(x => x.Usuario)
+                .Include(x => x.Recurso)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (historialUso == null)
+            if (h == null) return NotFound("No encontrado");
+
+            return Ok(new
             {
-                return NotFound();
-            }
-
-            return historialUso;
+                id = h.Id,
+                recursoId = h.RecursoId,
+                usuarioId = h.UsuarioId,
+                fechaUso = h.FechaUso.ToString("yyyy-MM-dd"),
+                horaInicio = h.HoraInicio.ToString("HH:mm"),
+                horaFin = h.HoraFin.ToString("HH:mm"),
+                estado = h.Estado,
+                notas = h.Notas,
+                activo = h.Activo ?? true,
+                fechaCreacion = h.FechaCreacion,
+                fechaModificacion = h.FechaModificacion,
+                usuario = h.Usuario,
+                recurso = h.Recurso
+            });
         }
 
-        // PUT: api/HistorialUsoes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutHistorialUso(int id, HistorialUsoDto dto)
+        // POST: api/HistorialUsos
+        [HttpPost]
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
+        public async Task<IActionResult> PostHistorialUso([FromBody] HistorialUsoDto dto)
         {
-            if (id != dto.Id)
-                return BadRequest("El id no coincide");
+            if (dto == null) return BadRequest("Body inválido");
+
+            if (dto.UsuarioId <= 0) return BadRequest("UsuarioId inválido");
+            if (dto.RecursoId <= 0) return BadRequest("RecursoId inválido");
+            if (string.IsNullOrWhiteSpace(dto.Estado)) return BadRequest("Estado es obligatorio");
+
+            var fechaTxt = (dto.FechaUso ?? "").Trim();
+            if (fechaTxt.Contains("T")) fechaTxt = fechaTxt.Split('T')[0];
+
+            if (!DateOnly.TryParseExact(fechaTxt, "yyyy-MM-dd", out var fecha))
+                return BadRequest("FechaUso inválida, formato yyyy-MM-dd");
+
+            var hi = (dto.HoraInicio ?? "").Trim();
+            var hf = (dto.HoraFin ?? "").Trim();
+            if (hi.Length >= 5) hi = hi.Substring(0, 5);
+            if (hf.Length >= 5) hf = hf.Substring(0, 5);
+
+            if (!TimeOnly.TryParseExact(hi, "HH:mm", out var horaInicio))
+                return BadRequest("HoraInicio inválida, formato HH:mm");
+
+            if (!TimeOnly.TryParseExact(hf, "HH:mm", out var horaFin))
+                return BadRequest("HoraFin inválida, formato HH:mm");
+
+            var entity = new HistorialUso
+            {
+                UsuarioId = dto.UsuarioId,
+                RecursoId = dto.RecursoId,
+                FechaUso = fecha,
+                HoraInicio = horaInicio,
+                HoraFin = horaFin,
+                Estado = dto.Estado,
+                Notas = dto.Notas,
+                Activo = dto.Activo,
+                FechaCreacion = DateTime.Now,
+                FechaModificacion = null
+            };
+
+            _context.HistorialUsos.Add(entity);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Historial creado", id = entity.Id });
+        }
+
+        // PUT: api/HistorialUsos/5
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrador,Encargado,Vecino")]
+        public async Task<IActionResult> PutHistorialUso(int id, [FromBody] HistorialUsoDto dto)
+        {
+            if (dto == null) return BadRequest("Body inválido");
+            if (id != dto.Id) return BadRequest("El id no coincide");
 
             var entity = await _context.HistorialUsos.FindAsync(id);
-            if (entity == null)
-                return NotFound();
+            if (entity == null) return NotFound("No encontrado");
+
+            var fechaTxt = (dto.FechaUso ?? "").Trim();
+            if (fechaTxt.Contains("T")) fechaTxt = fechaTxt.Split('T')[0];
+
+            if (!DateOnly.TryParseExact(fechaTxt, "yyyy-MM-dd", out var fecha))
+                return BadRequest("FechaUso inválida, formato yyyy-MM-dd");
+
+            var hi = (dto.HoraInicio ?? "").Trim();
+            var hf = (dto.HoraFin ?? "").Trim();
+            if (hi.Length >= 5) hi = hi.Substring(0, 5);
+            if (hf.Length >= 5) hf = hf.Substring(0, 5);
+
+            if (!TimeOnly.TryParseExact(hi, "HH:mm", out var horaInicio))
+                return BadRequest("HoraInicio inválida, formato HH:mm");
+
+            if (!TimeOnly.TryParseExact(hf, "HH:mm", out var horaFin))
+                return BadRequest("HoraFin inválida, formato HH:mm");
 
             entity.UsuarioId = dto.UsuarioId;
             entity.RecursoId = dto.RecursoId;
-            entity.FechaUso = DateOnly.Parse(dto.FechaUso);
-            entity.HoraInicio = TimeOnly.Parse(dto.HoraInicio);
-            entity.HoraFin = TimeOnly.Parse(dto.HoraFin);
+            entity.FechaUso = fecha;
+            entity.HoraInicio = horaInicio;
+            entity.HoraFin = horaFin;
             entity.Estado = dto.Estado;
             entity.Notas = dto.Notas;
             entity.Activo = dto.Activo;
@@ -74,46 +175,17 @@ namespace BackendComunidad.Controllers
         }
 
 
-        // POST: api/HistorialUsoes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<HistorialUso>> PostHistorialUso(HistorialUsoDto dto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var entity = new HistorialUso
-            {
-                UsuarioId = dto.UsuarioId,
-                RecursoId = dto.RecursoId,
-                FechaUso = DateOnly.ParseExact(dto.FechaUso, "yyyy-MM-dd"),
-                HoraInicio = TimeOnly.ParseExact(dto.HoraInicio, "HH:mm"),
-                HoraFin = TimeOnly.ParseExact(dto.HoraFin, "HH:mm"),
-                Estado = dto.Estado,
-                Notas = dto.Notas,
-                Activo = dto.Activo,
-                FechaCreacion = DateTime.Now
-            };
-
-            _context.HistorialUsos.Add(entity);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetHistorialUso), new { id = entity.Id }, entity);
-        }
-
 
         // DELETE: api/HistorialUsoes/5
         [HttpDelete("{id}")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> DeleteHistorialUso(int id)
         {
-            var historialUso = await _context.HistorialUsos.FindAsync(id);
-            if (historialUso == null)
-            {
-                return NotFound();
-            }
+            var h = await _context.HistorialUsos.FindAsync(id);
+            if (h == null) return NotFound();
 
-            _context.HistorialUsos.Remove(historialUso);
+            h.Activo = false;
+            h.FechaModificacion = DateTime.Now;
             await _context.SaveChangesAsync();
 
             return NoContent();

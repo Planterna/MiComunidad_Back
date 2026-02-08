@@ -1,7 +1,6 @@
 ﻿using BackendCom.Contexts;
 using BackendCom.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,37 +22,64 @@ namespace BackendComunidad.Controllers
             _context = context;
         }
 
+        // ======================
+        // DTOs
+        // ======================
+        public class ResetPassDto
+        {
+            public string Email { get; set; }
+            public string NewPassword { get; set; }
+        }
+
+        // ======================
+        // LOGIN
+        // ======================
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel login)
         {
             if (login == null)
                 return BadRequest("Datos inválidos");
 
+            var email = (login.Email ?? "").Trim().ToLower();
+            var pass = (login.PassHash ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pass))
+                return BadRequest("Email y contraseña son obligatorios");
+
             var usuario = _context.Usuarios
                 .Include(u => u.Rol)
                 .FirstOrDefault(u =>
-                    u.Email == login.Email &&
+                    u.Email.ToLower() == email &&
                     u.Estado == "Activo"
                 );
 
             if (usuario == null)
                 return Unauthorized("Credenciales incorrectas");
 
-            // Verificar contraseña con BCrypt
-            bool passwordValida = BCrypt.Net.BCrypt.Verify(
-                login.PassHash,      // contraseña que escribe el usuario
-                usuario.PassHash     // hash guardado en la BD
-            );
+            // Si el PassHash no es BCrypt válido, NO intentes Verify (evita Invalid salt version)
+            if (string.IsNullOrWhiteSpace(usuario.PassHash) || !usuario.PassHash.StartsWith("$2"))
+                return Unauthorized("Credenciales incorrectas");
+
+            bool passwordValida;
+            try
+            {
+                passwordValida = BCrypt.Net.BCrypt.Verify(pass, usuario.PassHash);
+            }
+            catch
+            {
+                return Unauthorized("Credenciales incorrectas");
+            }
 
             if (!passwordValida)
                 return Unauthorized("Credenciales incorrectas");
 
             var token = GenerateToken(usuario);
-
             return Ok(new { token });
         }
 
-
+        // ======================
+        // GENERATE TOKEN
+        // ======================
         private string GenerateToken(Usuario usuario)
         {
             var jwt = _configuration.GetSection("JwtSettings");
@@ -64,7 +90,7 @@ namespace BackendComunidad.Controllers
 
             var credentials = new SigningCredentials(
                 key,
-                SecurityAlgorithms.HmacSha256   
+                SecurityAlgorithms.HmacSha256
             );
 
             var claims = new[]
@@ -76,53 +102,19 @@ namespace BackendComunidad.Controllers
                 new Claim(ClaimTypes.Role, usuario.Rol?.Nombre ?? "User")
             };
 
-
             var token = new JwtSecurityToken(
                 issuer: jwt["Issuer"],
                 audience: jwt["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    int.Parse(jwt["ExpireMinutes"]!)
-                ),
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpireMinutes"]!)),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+     
 
-
-        [HttpPost("crear")]
-        public async Task<IActionResult> PostUsuarioCrear([FromBody] Usuario usuario)
-        {
-            // Validaciones
-            if (string.IsNullOrWhiteSpace(usuario.Cedula)) return BadRequest("La cédula es obligatoria");
-            if (string.IsNullOrWhiteSpace(usuario.Nombres)) return BadRequest("El nombre es obligatorio");
-            if (string.IsNullOrWhiteSpace(usuario.Apellidos)) return BadRequest("El apellido es obligatorio");
-            if (string.IsNullOrWhiteSpace(usuario.Email)) return BadRequest("El correo es obligatorio");
-            if (string.IsNullOrWhiteSpace(usuario.PassHash)) return BadRequest("La contraseña es obligatoria");
-
-            if (await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == usuario.Email.ToLower()))
-                return BadRequest("El correo ya está registrado");
-
-            if (await _context.Usuarios.AnyAsync(u => u.Cedula == usuario.Cedula))
-                return BadRequest("La cédula ya está registrada");
-
-            // Hash
-            usuario.PassHash = BCrypt.Net.BCrypt.HashPassword(usuario.PassHash);
-
-            // Resto de campos
-            usuario.RolId = 3;
-            usuario.Estado = "Activo";
-            usuario.FechaCreacion = DateTime.Now;
-            usuario.FechaModificacion = null;
-
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Usuario creado correctamente" });
-        }
-
-
+       
     }
 }

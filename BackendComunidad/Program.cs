@@ -1,28 +1,32 @@
 using BackendCom.Contexts;
+using BackendCom.Converters;
 using BackendCom.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =======================
-// SERVICES (ANTES DEL BUILD)
-// =======================
+// Controllers + JSON (CLAVE)
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 
-// Controllers
-builder.Services.AddControllers();
+    o.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+    o.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+});
 
-// Swagger / OpenAPI
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Base de datos
+// DB
 builder.Services.AddDbContext<ComunidadContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 // CORS
@@ -35,18 +39,15 @@ builder.Services.AddCors(options =>
     );
 });
 
-// JWT Settings
+// JWT settings
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings")
 );
 
-var jwtSettings = builder.Configuration
-    .GetSection("JwtSettings")
-    .Get<JwtSettings>();
-
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
 
-// Authentication JWT
+// Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -65,17 +66,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Authorization
 builder.Services.AddAuthorization();
 
-// =======================
-// BUILD
-// =======================
 var app = builder.Build();
-
-// =======================
-// MIDDLEWARE (DESPUÉS DEL BUILD)
-// =======================
 
 if (app.Environment.IsDevelopment())
 {
